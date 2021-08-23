@@ -1,17 +1,31 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <code>{{psdJson}}</code>
+    <div id="ImageContainer"></div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
+  data () {
+    return {
+      psdJson: null
+    }
+  },
+  mounted () {
+    this.parsePSD()
+  },
+  methods: {
+    parsePSD () {
+      let PSD = require('psd.js')
+      PSD.fromURL('/pad-demo.psd').then((psd) => {
+        this.psdJson = psd.tree().export()
+        console.log(psd.tree().export())
+        document.getElementById('ImageContainer').appendChild(psd.image.toPng());
+      })
+    }
   }
 }
 </script>
